@@ -95,13 +95,8 @@ class Homework():
         value = int(string)
         if value < 1:
             raise ArgumentTypeError("%r is not a valid number of processors, must be positive greater than 0" % value)
-        else:
-            return value
-
-    def parse_roi(self, string):
-        value = int(string)
-        if value < 0 or value > 50:
-            raise ArgumentTypeError("%r is not a valid radius of influence, must be positive less than or equal to 50" % value)
+        elif value > DEFAULT_NPROCS:
+            raise ArgumentTypeError("%r is not a valid number of processors, must be less than cpu count" % value)
         else:
             return value
 
