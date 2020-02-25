@@ -89,6 +89,8 @@ climahw 1.0 02/24/2020
   - imageio 2.8.0
   - numpy 1.18.1
   - pyresample 1.14.0
+  
+Later versions of the above are presumed to work (but have not been tested).
 
 ## Potential Improvements, Testing Tasks
 
