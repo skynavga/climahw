@@ -85,10 +85,10 @@ climahw 1.0 02/24/2020
 ```
 ## Dependencies
 
-  - python 3.6
   - imageio 2.8.0
   - numpy 1.18.1
   - pyresample 1.14.0
+  - python 3.6
   
 Later versions of the above are presumed to work (but have not been tested).
 
