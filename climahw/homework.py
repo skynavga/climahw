@@ -96,7 +96,7 @@ class Homework():
         if value < 1:
             raise ArgumentTypeError("%r is not a valid number of processors, must be positive greater than 0" % value)
         elif value > DEFAULT_NPROCS:
-            raise ArgumentTypeError("%r is not a valid number of processors, must be less than cpu count" % value)
+            raise ArgumentTypeError("%r is not a valid number of processors, must be less than cpu count %d" % (value, DEFAULT_NPROCS))
         else:
             return value
 
