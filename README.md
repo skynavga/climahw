@@ -94,18 +94,20 @@ Later versions of the above are presumed to work (but have not been tested).
 
 ## Potential Improvements, Testing Tasks
 
-1. Improve usage message (add default option values, improve option argument labels, etc).
+1. Add option for user to specify lat/lon origin of source area. At present, defaults to origin of UTM zone.
 
-2. Create unit tests.
+2. Improve usage message (add default option values, improve option argument labels, etc).
 
-3. Test alternative projections.
+3. Create unit tests.
 
-4. Eliminate assumptions about degree to length conversions.
+4. Test alternative projections.
 
-5. Eliminate warning from crs.py regarding conversion of PROJ string.
+5. Eliminate assumptions about degree to length conversions.
 
-6. Add further inline code documentation and expand variable name length should this code evolve into production code.
+6. Eliminate warning from crs.py regarding conversion of PROJ string.
 
-7. Add support for additional resample methods (bilinear, kdtree, elliptical, Gaussian, etc)
+7. Add further inline code documentation and expand variable name length should this code evolve into production code.
+
+8. Add support for additional resample methods (bilinear, kdtree, elliptical, Gaussian, etc)
 
 8. Obtain performance benchmarking metrics by resampling method and cpu count.
