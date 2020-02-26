@@ -95,8 +95,8 @@ class Homework():
         value = int(string)
         if value < 1:
             raise ArgumentTypeError("%r is not a valid number of processors, must be positive greater than 0" % value)
-        elif value > DEFAULT_NPROCS:
-            raise ArgumentTypeError("%r is not a valid number of processors, must be less than cpu count %d" % (value, DEFAULT_NPROCS))
+        elif value > self.DEFAULT_NUM_PROCS:
+            raise ArgumentTypeError("%r is not a valid number of processors, must be less than cpu count %d" % (value, self.DEFAULT_NUM_PROCS))
         else:
             return value
 
