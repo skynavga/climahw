@@ -94,7 +94,7 @@ Later versions of the above are presumed to work (but have not been tested).
 
 ## Potential Improvements, Testing Tasks
 
-1. Improve usage message (add default option values, improve option argument labels, etc)
+1. Improve usage message (add default option values, improve option argument labels, etc).
 
 2. Create unit tests.
 
