@@ -13,15 +13,6 @@ def encode_to_scaled_byte(raw, max_value):
     """
     return np.around(127*np.maximum(np.minimum(raw/max_value, 1), -1) + 128)
 
-def encode_magnitude_to_scaled_byte(magnitude, max_value):
-    """
-    Scale a real magnitude value so it fits in a byte
-
-    Scales a value between 0 and max_value to fit in an unsigned int between 0 and 255
-    Values outside of the max_value range are clipped
-    """
-    return np.around(255*np.maximum(np.minimum(magnitude/max_value, 1), 0) + 0)
-
 def decode_from_scaled_byte(byte, max_value):
     """
     Get the real value represented by a scaled byte (see encode_to_scaled_byte)
@@ -31,10 +22,6 @@ def decode_from_scaled_byte(byte, max_value):
 def encode_wind(raw):
     """ Take a real wind component value and turn it into a byte """
     return encode_to_scaled_byte(raw, MAX_WIND_SPEED)
-
-def encode_wind_magnitude(magnitude):
-    """ Take a real wind magnitude value and turn it into a byte """
-    return encode_magnitude_to_scaled_byte(magnitude, MAX_WIND_SPEED)
 
 def decode_wind(byte):
     """ Take a wind component value represented as a byte and get the real value """

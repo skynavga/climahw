@@ -1,4 +1,5 @@
-"""ClimaCell Homework
+"""
+ClimaCell Homework
 
 Convert u- and v- wind velocity component data represented by 8-bit gray-scale
 (as PNG images) to a scalar field then output as an (optionally rescaled)
@@ -8,7 +9,6 @@ See README.md for further information.
 
 Created on Feb 24, 2020 by
 @author <glenn.adams@colorado.edu>
-
 """
 
 from sys                        import argv
@@ -47,7 +47,6 @@ class Homework():
         args    - command line arguments
 
         Returns - Namespace object containing parsed command line arguments
-
         """
         ap = ArgumentParser(prog="climahw")
         # optional arguments (short and long form)
@@ -85,6 +84,7 @@ class Homework():
         return pa
 
     def parse_rescale(self, string):
+        """Parse and verify rescale option value."""
         value = float(string)
         if value < 0 or value > 1:
             raise ArgumentTypeError("%r is not a valid scale factor" % value)
@@ -92,6 +92,7 @@ class Homework():
             return value
 
     def parse_nprocs(self, string):
+        """Parse and verify nprocs option value."""
         value = int(string)
         if value < 1:
             raise ArgumentTypeError("%r is not a valid number of processors, must be positive greater than 0" % value)
@@ -101,6 +102,7 @@ class Homework():
             return value
 
     def parse_units(self, value):
+        """Parse and verify units option value."""
         if value != 'm' and value != 'd':
             raise ArgumentTypeError("%r is not a valid unit 'm' or 'd'" % value)
         else:
@@ -125,7 +127,6 @@ class Homework():
         pa      - parsed arguments (fom command line), a Namespace object
 
         Returns - parsed arguments with parsed argument state normalized to meters.
-
         """
         if pa.units == 'd':
             if pa.sShape is not None:
@@ -183,9 +184,16 @@ class Homework():
         pass
 
     def encode_wind_magnitude(self, magnitude):
+        """ Take a real wind magnitude value and turn it into a byte """
         return self.encode_magnitude_to_scaled_byte(magnitude, MAX_WIND_SPEED)
 
     def encode_magnitude_to_scaled_byte(self, magnitude, max_value):
+        """
+        Scale a real magnitude value so it fits in a byte
+
+        Scales a value between 0 and max_value to fit in an unsigned int between 0 and 255
+        Values outside of the max_value range are clipped
+        """
         return around(255*maximum(minimum(magnitude/max_value, 1), 0) + 0)
 
     def resample(self, pa, wData):
@@ -216,6 +224,7 @@ class Homework():
         return i2.image_data
     
     def area_extent_from_user_shape(self, shape, offset):
+        """ Compute area extent from shape and offset. """
         w = around(shape[0]/2)
         h = around(shape[1]/2)
         if offset is None:
@@ -227,6 +236,7 @@ class Homework():
         return [-w + dx, -h + dy, w + dx, h + dy]
 
     def compute_target_image_size(self, source_image_size, scale_factor):
+        """ Compute new image size using scale factor. """
         if scale_factor == 1:
             return source_image_size
         else:
