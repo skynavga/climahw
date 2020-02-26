@@ -1,4 +1,4 @@
-'''ClimaCell Homework
+"""ClimaCell Homework
 
 Convert u- and v- wind velocity component data represented by 8-bit gray-scale
 (as PNG images) to a scalar field then output as an (optionally rescaled)
@@ -9,7 +9,7 @@ See README.md for further information.
 Created on Feb 24, 2020 by
 @author <glenn.adams@colorado.edu>
 
-'''
+"""
 
 from sys                        import argv
 from os                         import cpu_count
@@ -39,7 +39,7 @@ class Homework():
         self.process_data(self.process_args(args))
 
     def process_args(self, args):
-        '''
+        """
         Process command line arguments
 
         Positional Parameters:
@@ -48,7 +48,7 @@ class Homework():
 
         Returns - Namespace object containing parsed command line arguments
 
-        '''
+        """
         ap = ArgumentParser(prog="climahw")
         # optional arguments (short and long form)
         ap.add_argument("-o", "--tOffset", dest="tOffset", type=float, nargs=2,
@@ -107,7 +107,7 @@ class Homework():
             return value
 
     def normalize_units(self, pa):
-        '''
+        """
         Normalize units to meters. If specified units are meters, then do
         nothing; otherwise, if degrees, then convert degrees to meters using
         fixed conversion ratio of 500 meters per 0.005 degrees. N.B. that this
@@ -126,7 +126,7 @@ class Homework():
 
         Returns - parsed arguments with parsed argument state normalized to meters.
 
-        '''
+        """
         if pa.units == 'd':
             if pa.sShape is not None:
                 pa.sShape = [*map(lambda x: x * self.DEGREES_TO_METERS, pa.sShape)]
@@ -138,7 +138,7 @@ class Homework():
         return pa
 
     def process_data(self, pa):
-        '''
+        """
         Perform data processing steps as follows:
 
         1. input image processing
@@ -153,7 +153,7 @@ class Homework():
 
         Returns - None
 
-        '''
+        """
         # 1. input image processing
         # ingest u-component image, reporting error if missing or corrupted
         try:
@@ -189,7 +189,7 @@ class Homework():
         return around(255*maximum(minimum(magnitude/max_value, 1), 0) + 0)
 
     def resample(self, pa, wData):
-        '''
+        """
         Resample (grid fit) wind speed magnitude data, wData, a 2-D numpy
         float64 array, using specified projection, creating a new
         array with a user specified area of interest (extent) and optionally
@@ -204,7 +204,7 @@ class Homework():
         Returns - a 2-D numpy float64 array representinting resampled wind data
                   using user specified target area of interest optionally rescaled
 
-        '''
+        """
         s1      = wData.shape                                                                   # a1.{width,height}
         e1      = self.area_extent_from_user_shape(pa.sShape, [0,0])
         a1      = AreaDefinition("a1", "Source Area", "a1p", pa.projection, s1[1], s1[0], e1)
