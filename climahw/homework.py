@@ -11,17 +11,16 @@ Created on Feb 24, 2020 by
 
 '''
 
-import numpy                    as np
-
-from argparse                   import ArgumentParser, ArgumentTypeError
-from encoding                   import decode_wind, MAX_WIND_SPEED
-from imageio                    import imread, imwrite
+from sys                        import argv
 from os                         import cpu_count
+from argparse                   import ArgumentParser, ArgumentTypeError
+
+from imageio                    import imread, imwrite
+from numpy                      import around, asarray, maximum, minimum, sqrt
 from pyresample.geometry        import AreaDefinition
 from pyresample.image           import ImageContainerQuick
-from sys                        import argv
 
-VERSION                         = "climahw 1.0 02/24/2020"
+from encoding                   import decode_wind, MAX_WIND_SPEED
 
 class Homework():
     
@@ -34,6 +33,7 @@ class Homework():
 
     # other constants
     DEGREES_TO_METERS           = 500.0/0.005
+    VERSION                     = "climahw 1.0 02/24/2020"
 
     def main(self, args):
         self.process_data(self.process_args(args))
@@ -63,7 +63,7 @@ class Homework():
                         help="target area shape in specified units, as longitude and latitude dimensions")
         ap.add_argument("-u", "--units", dest="units", type=self.parse_units, default=self.DEFAULT_AREA_UNIT,
                         help="units applied to area shapes, either 'm' (meters) or 'd' (degrees)")
-        ap.add_argument("-v", "--version", action="version", version=VERSION)
+        ap.add_argument("-v", "--version", action="version", version=self.VERSION)
         # optional arguments (long form only)
         ap.add_argument("--nprocs", dest="nprocs", type=self.parse_nprocs, default=self.DEFAULT_NUM_PROCS,
                         help="number of processors to apply to resampling operations")
@@ -157,19 +157,19 @@ class Homework():
         # 1. input image processing
         # ingest u-component image, reporting error if missing or corrupted
         try:
-            uData = np.asarray(imread(pa.uFile),dtype="uint8")
+            uData = asarray(imread(pa.uFile),dtype="uint8")
         except FileNotFoundError as exc:
             raise DataError("%s: uData image file not found" % exc)
         # ingest v-component image, reporting error if missing or corrupted
         try:
-            vData = np.asarray(imread(pa.vFile),dtype="uint8")
+            vData = asarray(imread(pa.vFile),dtype="uint8")
         except FileNotFoundError as exc:
             raise DataError("%s: uData image file not found" % exc)
         # basic validation of {u,v}-component image geometries
         assert vData.shape == uData.shape;
 
         # 2. construct scalar wind velocity field, i.e., wind speed (magnitude), from {u,v} component data
-        wData = np.sqrt(decode_wind(uData)**2 + decode_wind(vData)**2)
+        wData = sqrt(decode_wind(uData)**2 + decode_wind(vData)**2)
         
         # 3. re-sample scalar wind field according to user supplied resolution (grid box size) and re-sample method
         rData = self.resample(pa, wData)
@@ -186,7 +186,7 @@ class Homework():
         return self.encode_magnitude_to_scaled_byte(magnitude, MAX_WIND_SPEED)
 
     def encode_magnitude_to_scaled_byte(self, magnitude, max_value):
-        return np.around(255*np.maximum(np.minimum(magnitude/max_value, 1), 0) + 0)
+        return around(255*maximum(minimum(magnitude/max_value, 1), 0) + 0)
 
     def resample(self, pa, wData):
         '''
@@ -216,8 +216,8 @@ class Homework():
         return i2.image_data
     
     def area_extent_from_user_shape(self, shape, offset):
-        w = np.around(shape[0]/2)
-        h = np.around(shape[1]/2)
+        w = around(shape[0]/2)
+        h = around(shape[1]/2)
         if offset is None:
             dx = -w
             dy = h
