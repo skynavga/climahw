@@ -87,7 +87,7 @@ climahw 1.0 02/24/2020
 ```
 ## Testing
 
-A simple regression test may be performed by running the following from the top-level directory
+A simple regression test may be performed by running the following from the top-level directory:
 
 ```
 % python -m unittest discover
