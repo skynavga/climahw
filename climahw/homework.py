@@ -11,16 +11,16 @@ Created on Feb 24, 2020 by
 @author <glenn.adams@colorado.edu>
 """
 
-from sys                        import argv
-from os                         import cpu_count
-from argparse                   import ArgumentParser, ArgumentTypeError
+import sys
+import os
+import argparse
 
 from imageio                    import imread, imwrite
 from numpy                      import around, asarray, maximum, minimum, sqrt
 from pyresample.geometry        import AreaDefinition
 from pyresample.image           import ImageContainerQuick
 
-from encoding                   import decode_wind, MAX_WIND_SPEED
+from climahw.encoding           import decode_wind, MAX_WIND_SPEED
 
 class Homework():
     
@@ -29,13 +29,13 @@ class Homework():
     DEFAULT_AREA_UNIT           = 'm'
     DEFAULT_IMAGE_SCALE         = 1.0
     DEFAULT_PROJECTION          = "+proj=utm +zone=13 +ellps=WGS84"
-    DEFAULT_NUM_PROCS           = cpu_count()
+    DEFAULT_NUM_PROCS           = os.cpu_count()
 
     # other constants
     DEGREES_TO_METERS           = 500.0/0.005
     VERSION                     = "climahw 1.0 02/24/2020"
 
-    def main(self, args):
+    def run(self, args):
         self.process_data(self.process_args(args))
 
     def process_args(self, args):
@@ -48,7 +48,7 @@ class Homework():
 
         Returns - Namespace object containing parsed command line arguments
         """
-        ap = ArgumentParser(prog="climahw")
+        ap = argparse.ArgumentParser(prog="climahw")
         # optional arguments (short and long form)
         ap.add_argument("-o", "--tOffset", dest="tOffset", type=float, nargs=2,
                         help="target area offset in specified units, as longitude and latitude offset")
@@ -87,7 +87,7 @@ class Homework():
         """Parse and verify rescale option value."""
         value = float(string)
         if value < 0 or value > 1:
-            raise ArgumentTypeError("%r is not a valid scale factor" % value)
+            raise argparse.ArgumentTypeError("%r is not a valid scale factor" % value)
         else:
             return value
 
@@ -95,16 +95,16 @@ class Homework():
         """Parse and verify nprocs option value."""
         value = int(string)
         if value < 1:
-            raise ArgumentTypeError("%r is not a valid number of processors, must be positive greater than 0" % value)
+            raise argparse.ArgumentTypeError("%r is not a valid number of processors, must be positive greater than 0" % value)
         elif value > self.DEFAULT_NUM_PROCS:
-            raise ArgumentTypeError("%r is not a valid number of processors, must be less than cpu count %d" % (value, self.DEFAULT_NUM_PROCS))
+            raise argparse.ArgumentTypeError("%r is not a valid number of processors, must be less than cpu count %d" % (value, self.DEFAULT_NUM_PROCS))
         else:
             return value
 
     def parse_units(self, value):
         """Parse and verify units option value."""
         if value != 'm' and value != 'd':
-            raise ArgumentTypeError("%r is not a valid unit 'm' or 'd'" % value)
+            raise argparse.ArgumentTypeError("%r is not a valid unit 'm' or 'd'" % value)
         else:
             return value
 
@@ -249,4 +249,4 @@ class DataError(Exception):
         return repr(self.value)
 
 if __name__ == '__main__':
-    Homework().main(argv)
+    Homework().run(sys.argv)

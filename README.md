@@ -24,31 +24,31 @@ For this simple assignment, I have selected the [UTM](https://proj.org/operation
 
 1. Perform identity mapping (modulo resampling artifacts).
 
-```% python climahw/homework.py data/00_u.png data/00_v.png out/out1.png```
+```% python -m climahw.homework data/00_u.png data/00_v.png out/out1.png```
 
 2. Resample with same target area as source area but rescale (downsample) output image to 25% of original resolution.
 
-```% python climahw/homework.py -r 0.25 data/00_u.png data/00_v.png out/out2.png```
+```% python -m climahw.homework -r 0.25 data/00_u.png data/00_v.png out/out2.png```
 
 3. Resample with target area as top left quadrant of source area
 
-```% python climahw/homework.py -s 1000 500 -t 500 250 data/00_u.png data/00_v.png out/out3.png```
+```% python -m climahw.homework -s 1000 500 -t 500 250 data/00_u.png data/00_v.png out/out3.png```
 
 4. Resample with target area as central [50% 50%] of source area
 
-```% python climahw/homework.py -s 1000 500 -t 500 250 -o 0 0 data/00_u.png data/00_v.png out/out4.png```
+```% python -m climahw.homework -s 1000 500 -t 500 250 -o 0 0 data/00_u.png data/00_v.png out/out4.png```
 
 5. Resample with target area as top right quadrant of source area
 
-```% python climahw/homework.py -s 1000 500 -t 500 250 -o 250 125 data/00_u.png data/00_v.png out/out5.png```
+```% python -m climahw.homework -s 1000 500 -t 500 250 -o 250 125 data/00_u.png data/00_v.png out/out5.png```
 
 6. Resample with target area as bottom right quadrant of source area, and further rescale output image to 25% of original, also, use single processor.
 
-```% python climahw/homework.py -s 1000 500 -t 500 250 -o 250 -125 -r 0.25 --nprocs 1 data/00_u.png data/00_v.png out/out6.png```
+```% python -m climahw.homework -s 1000 500 -t 500 250 -o 250 -125 -r 0.25 --nprocs 1 data/00_u.png data/00_v.png out/out6.png```
 
 7. Get usage information.
 
-```% python climahw/homework.py --help```
+```% python -m climahw.homework --help```
 
 ```
 usage: climahw [-h] [-o TOFFSET TOFFSET] [-p PROJECTION] [-r RESCALE] [-s SSHAPE SSHAPE] [-t TSHAPE TSHAPE] [-u UNITS] [-v] [--nprocs NPROCS]
@@ -80,7 +80,7 @@ optional arguments:
 8. Get version information.
 
 ```
-% python climahw/homework.py --version
+% python -m climahw.homework --version
 climahw 1.0 02/24/2020
 ```
 ## Dependencies
