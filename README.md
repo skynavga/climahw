@@ -22,6 +22,8 @@ For this simple assignment, I have selected the [UTM](https://proj.org/operation
 
 ## Example Usage
 
+The following examples may be performed from the top-level directory of the source (or binary) distribution.
+
 1. Perform identity mapping (modulo resampling artifacts).
 
 ```% python -m climahw.homework data/00_u.png data/00_v.png out/out1.png```

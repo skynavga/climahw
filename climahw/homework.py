@@ -48,7 +48,7 @@ class Homework():
 
         Returns - Namespace object containing parsed command line arguments
         """
-        ap = argparse.ArgumentParser(prog="climahw")
+        ap = argparse.ArgumentParser(prog="climahw.homework")
         # optional arguments (short and long form)
         ap.add_argument("-o", "--tOffset", dest="tOffset", type=float, nargs=2,
                         help="target area offset in specified units, as longitude and latitude offset")
