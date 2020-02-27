@@ -36,7 +36,7 @@ class Homework():
     VERSION                     = "climahw 1.0 02/24/2020"
 
     def run(self, args):
-        self._process_data(self._process_args(args))
+        return self._process_data(self._process_args(args))
 
     def _process_args(self, args):
         """
@@ -146,13 +146,13 @@ class Homework():
         2. construct scalar wind velocity field, i.e., wind speed (magnitude), from {u,v} component data
         3. re-sample scalar wind field according to user supplied resolution (grid box size) and re-sample method
         4. encode re-sampled scalar wind field using 8-bit unsigned data denoting |ws| < 25 m/s
-        5. output image processing (write wind speed magnitude as png file)
+        5. output image processing (write wind speed magnitude as PNG file)
 
         Positional Parameters:
 
         pa      - parsed arguments (fom command line), a Namespace object
 
-        Returns - None
+        Returns - path of output PNG file, i.e., oFile command line argument
 
         """
         # 1. input image processing
@@ -181,7 +181,7 @@ class Homework():
         # 5. output image processing (write wind speed magnitude as png file)
         imwrite(pa.oFile, mData, format="png")
 
-        pass
+        return pa.oFile
 
     def _encode_wind_magnitude(self, magnitude):
         """ Take a real wind magnitude value and turn it into a byte """

@@ -94,22 +94,28 @@ climahw 1.0 02/24/2020
   
 Later versions of the above are presumed to work (but have not been tested).
 
-## Potential Improvements, Testing Tasks
+## Testing
 
-1. Add option for user to specify lat/lon origin of source area. At present, defaults to origin of UTM zone.
+A simple regression test may be performed by running the following from the top-level directory
 
-2. Improve usage message (add default option values, improve option argument labels, etc).
+```
+% python -m unittest discover
+```
 
-3. Create unit tests.
+This will re-run the examples described above, comparing the output images against the images previously computed and saved in the top-level ``data`` directory.
 
-4. Test alternative projections.
+## Potential Improvements
 
-5. Eliminate assumptions about degree to length conversions.
+1. Improve usage message (add default option values, improve option argument labels, etc).
 
-6. Eliminate warning from crs.py regarding conversion of PROJ string.
+2. Test alternative projections.
 
-7. Add further inline code documentation and expand variable name length should this code evolve into production code.
+3. Eliminate assumptions about degree to length conversions, in which case it will be necessary to add option for user to specify lat/lon origin of source area. At present, defaults to origin of UTM zone.
 
-8. Add support for additional resample methods (bilinear, kdtree, elliptical, Gaussian, etc)
+4. Eliminate warning from crs.py regarding conversion of PROJ string.
 
-8. Obtain performance benchmarking metrics by resampling method and cpu count.
+5. Add further inline code documentation and expand variable name length should this code evolve into production code.
+
+6. Add support for additional resample methods (bilinear, kdtree, elliptical, Gaussian, etc)
+
+7. Obtain performance benchmarking metrics by resampling method and cpu count.
