@@ -36,9 +36,9 @@ class Homework():
     VERSION                     = "climahw 1.0 02/24/2020"
 
     def run(self, args):
-        self.process_data(self.process_args(args))
+        self._process_data(self._process_args(args))
 
-    def process_args(self, args):
+    def _process_args(self, args):
         """
         Process command line arguments
 
@@ -54,17 +54,17 @@ class Homework():
                         help="target area offset in specified units, as longitude and latitude offset")
         ap.add_argument("-p", "--projection", dest="projection", default=self.DEFAULT_PROJECTION,
                         help="projection applied to source and target areas")
-        ap.add_argument("-r", "--rescale", dest="rescale", type=self.parse_rescale, default=self.DEFAULT_IMAGE_SCALE,
+        ap.add_argument("-r", "--rescale", dest="rescale", type=self._parse_rescale, default=self.DEFAULT_IMAGE_SCALE,
                         help="(re)scale factor to apply to output image")
         ap.add_argument("-s", "--sShape", dest="sShape", type=float, nargs=2, default=self.DEFAULT_AREA_SOURCE,
                         help="source area shape in specified units, as longitude and latitude dimensions")
         ap.add_argument("-t", "--tShape", dest="tShape", type=float, nargs=2,
                         help="target area shape in specified units, as longitude and latitude dimensions")
-        ap.add_argument("-u", "--units", dest="units", type=self.parse_units, default=self.DEFAULT_AREA_UNIT,
+        ap.add_argument("-u", "--units", dest="units", type=self._parse_units, default=self.DEFAULT_AREA_UNIT,
                         help="units applied to area shapes, either 'm' (meters) or 'd' (degrees)")
         ap.add_argument("-v", "--version", action="version", version=self.VERSION)
         # optional arguments (long form only)
-        ap.add_argument("--nprocs", dest="nprocs", type=self.parse_nprocs, default=self.DEFAULT_NUM_PROCS,
+        ap.add_argument("--nprocs", dest="nprocs", type=self._parse_nprocs, default=self.DEFAULT_NUM_PROCS,
                         help="number of processors to apply to resampling operations")
         # positional arguments
         ap.add_argument("uFile", help="u-component input file, an 8-bit PNG grayscale image")
@@ -77,13 +77,13 @@ class Homework():
         if pa.nprocs > self.DEFAULT_NUM_PROCS:
             pa.nprocs = self.DEFAULT_NUM_PROCS
         if pa.units == 'd':
-            pa = self.normalize_units(pa)
+            pa = self._normalize_units(pa)
         if pa.tShape is None:
             pa.tShape = pa.sShape
             pa.tOffset = [0,0]
         return pa
 
-    def parse_rescale(self, string):
+    def _parse_rescale(self, string):
         """Parse and verify rescale option value."""
         value = float(string)
         if value < 0 or value > 1:
@@ -91,7 +91,7 @@ class Homework():
         else:
             return value
 
-    def parse_nprocs(self, string):
+    def _parse_nprocs(self, string):
         """Parse and verify nprocs option value."""
         value = int(string)
         if value < 1:
@@ -101,14 +101,14 @@ class Homework():
         else:
             return value
 
-    def parse_units(self, value):
+    def _parse_units(self, value):
         """Parse and verify units option value."""
         if value != 'm' and value != 'd':
             raise argparse.ArgumentTypeError("%r is not a valid unit 'm' or 'd'" % value)
         else:
             return value
 
-    def normalize_units(self, pa):
+    def _normalize_units(self, pa):
         """
         Normalize units to meters. If specified units are meters, then do
         nothing; otherwise, if degrees, then convert degrees to meters using
@@ -138,7 +138,7 @@ class Homework():
             pa.units = 'm'
         return pa
 
-    def process_data(self, pa):
+    def _process_data(self, pa):
         """
         Perform data processing steps as follows:
 
@@ -173,21 +173,21 @@ class Homework():
         wData = sqrt(decode_wind(uData)**2 + decode_wind(vData)**2)
         
         # 3. re-sample scalar wind field according to user supplied resolution (grid box size) and re-sample method
-        rData = self.resample(pa, wData)
+        rData = self._resample(pa, wData)
 
         # 4. encode re-sampled scalar wind field using 8-bit unsigned data denoting |ws| < 25 m/s
-        mData = self.encode_wind_magnitude(rData).astype(dtype="uint8")
+        mData = self._encode_wind_magnitude(rData).astype(dtype="uint8")
 
         # 5. output image processing (write wind speed magnitude as png file)
         imwrite(pa.oFile, mData, format="png")
 
         pass
 
-    def encode_wind_magnitude(self, magnitude):
+    def _encode_wind_magnitude(self, magnitude):
         """ Take a real wind magnitude value and turn it into a byte """
-        return self.encode_magnitude_to_scaled_byte(magnitude, MAX_WIND_SPEED)
+        return self._encode_magnitude_to_scaled_byte(magnitude, MAX_WIND_SPEED)
 
-    def encode_magnitude_to_scaled_byte(self, magnitude, max_value):
+    def _encode_magnitude_to_scaled_byte(self, magnitude, max_value):
         """
         Scale a real magnitude value so it fits in a byte
 
@@ -196,7 +196,7 @@ class Homework():
         """
         return around(255*maximum(minimum(magnitude/max_value, 1), 0) + 0)
 
-    def resample(self, pa, wData):
+    def _resample(self, pa, wData):
         """
         Resample (grid fit) wind speed magnitude data, wData, a 2-D numpy
         float64 array, using specified projection, creating a new
@@ -214,16 +214,16 @@ class Homework():
 
         """
         s1      = wData.shape                                                                   # a1.{width,height}
-        e1      = self.area_extent_from_user_shape(pa.sShape, [0,0])
+        e1      = self._area_extent_from_user_shape(pa.sShape, [0,0])
         a1      = AreaDefinition("a1", "Source Area", "a1p", pa.projection, s1[1], s1[0], e1)
         i1      = ImageContainerQuick(wData, a1, nprocs=pa.nprocs)
-        s2      = self.compute_target_image_size(s1, pa.rescale)
-        e2      = self.area_extent_from_user_shape(pa.tShape, pa.tOffset)
+        s2      = self._compute_target_image_size(s1, pa.rescale)
+        e2      = self._area_extent_from_user_shape(pa.tShape, pa.tOffset)
         a2      = AreaDefinition("a2", "Target Area", "a2p", pa.projection, s2[1], s2[0], e2)
         i2      = i1.resample(a2)
         return i2.image_data
     
-    def area_extent_from_user_shape(self, shape, offset):
+    def _area_extent_from_user_shape(self, shape, offset):
         """ Compute area extent from shape and offset. """
         w = around(shape[0]/2)
         h = around(shape[1]/2)
@@ -235,7 +235,7 @@ class Homework():
             dy = offset[1]
         return [-w + dx, -h + dy, w + dx, h + dy]
 
-    def compute_target_image_size(self, source_image_size, scale_factor):
+    def _compute_target_image_size(self, source_image_size, scale_factor):
         """ Compute new image size using scale factor. """
         if scale_factor == 1:
             return source_image_size
