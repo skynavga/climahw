@@ -85,15 +85,6 @@ optional arguments:
 % python -m climahw.homework --version
 climahw 1.0 02/24/2020
 ```
-## Dependencies
-
-  - [imageio](https://imageio.readthedocs.io/en/stable/index.html) 2.8.0
-  - [numpy](https://numpy.org/) 1.18.1
-  - [pyresample](https://pyresample.readthedocs.io/en/latest/) 1.14.0
-  - [python](https://www.python.org/) 3.6
-  
-Later versions of the above are presumed to work (but have not been tested).
-
 ## Testing
 
 A simple regression test may be performed by running the following from the top-level directory
@@ -103,6 +94,15 @@ A simple regression test may be performed by running the following from the top-
 ```
 
 This will re-run the examples described above, comparing the output images against the images previously computed and saved in the top-level ``data`` directory.
+
+## Dependencies
+
+  - [imageio](https://imageio.readthedocs.io/en/stable/index.html) 2.8.0
+  - [numpy](https://numpy.org/) 1.18.1
+  - [pyresample](https://pyresample.readthedocs.io/en/latest/) 1.14.0
+  - [python](https://www.python.org/) 3.6
+  
+Later versions of the above are presumed to work (but have not been tested).
 
 ## Potential Improvements
 
