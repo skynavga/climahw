@@ -93,7 +93,7 @@ A simple regression test may be performed by running the following from the top-
 % python -m unittest discover -v
 ```
 
-This will re-run the examples described above, comparing the output images against the images previously computed and saved in the top-level ``data`` directory.
+This will re-run the examples described above, comparing the output images against the images previously computed and saved in the top-level ``out`` directory.
 
 ## Dependencies
 
