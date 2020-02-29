@@ -14,6 +14,7 @@ Created on Feb 24, 2020 by
 import sys
 import os
 import argparse
+import warnings
 
 from imageio                    import imread, imwrite
 from numpy                      import around, asarray, maximum, minimum, sqrt
@@ -28,7 +29,7 @@ class Homework():
     DEFAULT_AREA_SOURCE         = [1000.0, 500.0]
     DEFAULT_AREA_UNIT           = 'm'
     DEFAULT_IMAGE_SCALE         = 1.0
-    DEFAULT_PROJECTION          = "+proj=utm +zone=13 +ellps=WGS84"
+    DEFAULT_PROJECTION          = "+proj=utm +zone=13 +ellps=WGS84 +units=m"
     DEFAULT_NUM_PROCS           = os.cpu_count()
 
     # other constants
@@ -219,9 +220,13 @@ class Homework():
         i1      = ImageContainerQuick(wData, a1, nprocs=pa.nprocs)
         s2      = self._compute_target_image_size(s1, pa.rescale)
         e2      = self._area_extent_from_user_shape(pa.tShape, pa.tOffset)
+        a2      = None
         a2      = AreaDefinition("a2", "Target Area", "a2p", pa.projection, s2[1], s2[0], e2)
-        i2      = i1.resample(a2)
-        return i2.image_data
+        # ignore warning about proj4 string from pyproj.crs
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore', category=UserWarning)
+            i2  = i1.resample(a2)
+            return i2.image_data
     
     def _area_extent_from_user_shape(self, shape, offset):
         """ Compute area extent from shape and offset. """

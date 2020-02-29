@@ -99,7 +99,7 @@ Later versions of the above are presumed to work (but have not been tested).
 A simple regression test may be performed by running the following from the top-level directory
 
 ```
-% python -m unittest discover
+% python -m unittest discover -v
 ```
 
 This will re-run the examples described above, comparing the output images against the images previously computed and saved in the top-level ``data`` directory.
@@ -112,10 +112,8 @@ This will re-run the examples described above, comparing the output images again
 
 3. Eliminate assumptions about degree to length conversions, in which case it will be necessary to add option for user to specify lat/lon origin of source area. At present, defaults to origin of UTM zone.
 
-4. Eliminate warning from crs.py regarding conversion of PROJ string.
+4. Add further inline code documentation and expand variable name length should this code evolve into production code.
 
-5. Add further inline code documentation and expand variable name length should this code evolve into production code.
+5. Add support for additional resample methods (bilinear, kdtree, elliptical, Gaussian, etc)
 
-6. Add support for additional resample methods (bilinear, kdtree, elliptical, Gaussian, etc)
-
-7. Obtain performance benchmarking metrics by resampling method and cpu count.
+6. Obtain performance benchmarking metrics by resampling method and cpu count.
