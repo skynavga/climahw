@@ -57,9 +57,9 @@ class Homework():
                         help="projection applied to source and target areas")
         ap.add_argument("-r", "--rescale", dest="rescale", type=self._parse_rescale, default=self.DEFAULT_IMAGE_SCALE,
                         help="(re)scale factor to apply to output image")
-        ap.add_argument("-s", "--sShape", dest="sShape", type=float, nargs=2, default=self.DEFAULT_AREA_SOURCE,
+        ap.add_argument("-s", "--sArea", dest="sArea", type=float, nargs=2, default=self.DEFAULT_AREA_SOURCE,
                         help="source area shape in specified units, as longitude and latitude dimensions")
-        ap.add_argument("-t", "--tShape", dest="tShape", type=float, nargs=2,
+        ap.add_argument("-t", "--tArea", dest="tArea", type=float, nargs=2,
                         help="target area shape in specified units, as longitude and latitude dimensions")
         ap.add_argument("-u", "--units", dest="units", type=self._parse_units, default=self.DEFAULT_AREA_UNIT,
                         help="units applied to area shapes, either 'm' (meters) or 'd' (degrees)")
@@ -79,8 +79,8 @@ class Homework():
             pa.nprocs = self.DEFAULT_NUM_PROCS
         if pa.units == 'd':
             pa = self._normalize_units(pa)
-        if pa.tShape is None:
-            pa.tShape = pa.sShape
+        if pa.tArea is None:
+            pa.tArea = pa.sArea
             pa.tOffset = [0,0]
         return pa
 
@@ -130,10 +130,10 @@ class Homework():
         Returns - parsed arguments with parsed argument state normalized to meters.
         """
         if pa.units == 'd':
-            if pa.sShape is not None:
-                pa.sShape = [*map(lambda x: x * self.DEGREES_TO_METERS, pa.sShape)]
-            if pa.tShape is not None:
-                pa.tShape = [*map(lambda x: x * self.DEGREES_TO_METERS, pa.tShape)]
+            if pa.sArea is not None:
+                pa.sArea = [*map(lambda x: x * self.DEGREES_TO_METERS, pa.sArea)]
+            if pa.tArea is not None:
+                pa.tArea = [*map(lambda x: x * self.DEGREES_TO_METERS, pa.tArea)]
             if pa.tOffset is not None:
                 pa.tOffset = [*map(lambda x: x * self.DEGREES_TO_METERS, pa.tOffset)]
             pa.units = 'm'
@@ -215,11 +215,11 @@ class Homework():
 
         """
         s1      = wData.shape                                                                   # a1.{width,height}
-        e1      = self._area_extent_from_user_shape(pa.sShape, [0,0])
+        e1      = self._area_extent_from_user_area(pa.sArea, [0,0])
         a1      = AreaDefinition("a1", "Source Area", "a1p", pa.projection, s1[1], s1[0], e1)
         i1      = ImageContainerQuick(wData, a1, nprocs=pa.nprocs)
         s2      = self._compute_target_image_size(s1, pa.rescale)
-        e2      = self._area_extent_from_user_shape(pa.tShape, pa.tOffset)
+        e2      = self._area_extent_from_user_area(pa.tArea, pa.tOffset)
         a2      = None
         a2      = AreaDefinition("a2", "Target Area", "a2p", pa.projection, s2[1], s2[0], e2)
         # ignore warning about proj4 string from pyproj.crs
@@ -228,10 +228,10 @@ class Homework():
             i2  = i1.resample(a2)
             return i2.image_data
     
-    def _area_extent_from_user_shape(self, shape, offset):
-        """ Compute area extent from shape and offset. """
-        w = around(shape[0]/2)
-        h = around(shape[1]/2)
+    def _area_extent_from_user_area(self, area, offset):
+        """ Compute area extent from area and offset. """
+        w = around(area[0]/2)
+        h = around(area[1]/2)
         if offset is None:
             dx = -w
             dy = h
