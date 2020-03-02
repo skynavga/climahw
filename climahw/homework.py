@@ -220,7 +220,6 @@ class Homework():
         i1      = ImageContainerQuick(wData, a1, nprocs=pa.nprocs)
         s2      = self._compute_target_image_size(s1, pa.rescale)
         e2      = self._area_extent_from_user_area(pa.tArea, pa.tOffset)
-        a2      = None
         a2      = AreaDefinition("a2", "Target Area", "a2p", pa.projection, s2[1], s2[0], e2)
         # ignore warning about proj4 string from pyproj.crs
         with warnings.catch_warnings():
