@@ -8,7 +8,7 @@ For this simple assignment, I have selected the [UTM](https://proj.org/operation
 
 ## Additional Notes
 
-1. Both source and target areas, specified with the ``-s/--sArea`` and ``-t/--tArea`` command line options, are interpreted in meters or degrees depending on the value of the ``-u/--units`` option (default is ``m``). If not specified, the source area defaults to 1000 meters longitude and 500 meters latitude (corresponding to 0.010 and 0.005 degrees). If the target shape is not specified, it defaults to the source shape. For the purpose of resampling, the centers of the areas are their centroids (and not their top, left corners). In order to allow specifying a target area which center is not coincident with the source area's center, a ``-o/--tOffset`` option is available which takes a longitude/latitude offset (in meters or degrees according to the applicable units) with respect to the center of the source area. If no offset is specified, and the target shape is not the same as the source shape, then an offset is implied that places the target area such that its upper left corner coincides with the upper left corner of the source area; however, if the target area is not specified (but defaulted to the source area), then its offset will default to ``[0,0]`` which places it coincident to the center of the source area.
+1. Both source and target areas, specified with the ``-s/--sArea`` and ``-t/--tArea`` command line options, are interpreted in meters or degrees depending on the value of the ``-u/--units`` option (default is ``m``). If not specified, the source area defaults to 500 meters width (longitude) and height (latitude). If the target shape is not specified, it defaults to the source shape. For the purpose of resampling, the centers of the areas are their centroids (and not their top, left corners). In order to allow specifying a target area which center is not coincident with the source area's center, a ``-o/--tOffset`` option is available which takes a longitude/latitude offset (in meters or degrees according to the applicable units) with respect to the center of the source area. If no offset is specified, and the target shape is not the same as the source shape, then an offset is implied that places the target area such that its upper left corner coincides with the upper left corner of the source area; however, if the target area is not specified (but defaulted to the source area), then its offset will default to ``[0,0]`` which places it coincident to the center of the source area.
 
 2. Although [pyresample](https://pyresample.readthedocs.io/en/latest/) provides a number of resampling algorithms, I have selected a simple and quick approximate nearest neighbor algorithm for this exercise. Other algorithms are available, including bilinear, elliptical weighted average (EWA), and Gaussian weighted, but are not yet exposed by this tool.
 
@@ -16,9 +16,7 @@ For this simple assignment, I have selected the [UTM](https://proj.org/operation
 
 4. The [pyresample](https://pyresample.readthedocs.io/en/latest/) implementation supports multiprocessor platforms. For this exercise, the maximum number of processors available are used for resampling operations, however, a command line option ``--nprocs`` is available to permit user control over the actual cpu count.
 
-5. The given problem description indicates that the input data corresponds to a 0.005 degree spatial resolution grid. Since the input image data is rectangular according to a pixel ratio 2:1 (longitudinally by latitudinally), and I have no information to the contrary, I will assume that image pixels correspond to square spatial samples, and, therefore, that each image corresponds to a grid box having dimensions of 0.010 by 0.005 degrees, which, according to the provided documentation, are to be treated as 1000 by 500 meters using a conversion factor of 500 meters to 0.005 degrees (100km/degree).
-
-6. In further comment to the last note, I will just mention that the relationship between degrees latitude and longitude and linear distance is not constant on the surface of the Earth; for latitude, it is nearly constant at ~111km/degree, slightly increasing towards the poles; however, for longitude, it is at a maximum (also ~111km) near the equator, and decreasing to zero at the poles. As a consequence, using a constant mapping of 100km/degree, while a convenient simplification, introduces gross errors when used to process real world data. However, since we are using the [UTM](https://proj.org/operations/projections/utm.html) projection for resampling (by default), which has its origin on the Equator, then the mapping turns out to be nearly equal, so the stated conversion is not unreasonable as a rough approximation.
+5. For the purpose of converting between degrees to linear distance, the instructions specifies use of a fixed conversion factor of 500 meters per 0.005 degrees latitude (and longitude), which works out to 100km/degree. I will just mention that the relationship between degrees latitude and longitude and linear distance is not constant on the surface of the Earth; for latitude, it is nearly constant at ~111km/degree, slightly increasing towards the poles; however, for longitude, it is at a maximum (also ~111km) near the equator, and decreasing to zero at the poles. As a consequence, using a constant mapping of 100km/degree, while a convenient simplification, introduces gross errors when used to process real world data. However, since we are using the [UTM](https://proj.org/operations/projections/utm.html) projection for resampling (by default), which has its origin on the Equator, then the mapping turns out to be nearly constant, so the stated conversion is not unreasonable as a rough approximation.
 
 ## Example Usage
 
@@ -34,19 +32,19 @@ The following examples may be performed from the top-level directory of the sour
 
 3. Resample with target area as top left quadrant of source area
 
-```% python -m climahw.homework -s 1000 500 -t 500 250 data/00_u.png data/00_v.png out/out3.png```
+```% python -m climahw.homework -s 500 500 -t 250 250 data/00_u.png data/00_v.png out/out3.png```
 
 4. Resample with target area as central [50% 50%] of source area
 
-```% python -m climahw.homework -s 1000 500 -t 500 250 -o 0 0 data/00_u.png data/00_v.png out/out4.png```
+```% python -m climahw.homework -s 500 500 -t 250 250 -o 0 0 data/00_u.png data/00_v.png out/out4.png```
 
 5. Resample with target area as top right quadrant of source area
 
-```% python -m climahw.homework -s 1000 500 -t 500 250 -o 250 125 data/00_u.png data/00_v.png out/out5.png```
+```% python -m climahw.homework -s 500 500 -t 250 250 -o 125 125 data/00_u.png data/00_v.png out/out5.png```
 
 6. Resample with target area as bottom right quadrant of source area, and further rescale output image to 25% of original, also, use single processor.
 
-```% python -m climahw.homework -s 1000 500 -t 500 250 -o 250 -125 -r 0.25 --nprocs 1 data/00_u.png data/00_v.png out/out6.png```
+```% python -m climahw.homework -s 500 500 -t 250 250 -o 125 -125 -r 0.25 --nprocs 1 data/00_u.png data/00_v.png out/out6.png```
 
 7. Get usage information.
 
