@@ -37,16 +37,16 @@ class RegressionTestClass(unittest.TestCase):
         self._test_regression('-r 0.25', 'out2')
 
     def test_regression_3(self):
-        self._test_regression('-s 1000 500 -t 500 250', 'out3')
+        self._test_regression('-s 500 500 -t 250 250', 'out3')
 
     def test_regression_4(self):
-        self._test_regression('-s 1000 500 -t 500 250 -o 0 0', 'out4')
+        self._test_regression('-s 500 500 -t 250 250 -o 0 0', 'out4')
 
     def test_regression_5(self):
-        self._test_regression('-s 1000 500 -t 500 250 -o 250 125', 'out5')
+        self._test_regression('-s 500 500 -t 250 250 -o 125 125', 'out5')
 
     def test_regression_6(self):
-        self._test_regression('-s 1000 500 -t 500 250 -o 250 -125 -r 0.25 --nprocs 1', 'out6')
+        self._test_regression('-s 500 500 -t 250 250 -o 125 -125 -r 0.25 --nprocs 1', 'out6')
 
     def _test_regression(self, options, oFileName):
         (rArgs, rFile) = self._mkTestCase(options, oFileName)

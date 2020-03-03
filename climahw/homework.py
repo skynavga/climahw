@@ -26,7 +26,7 @@ from climahw.encoding           import decode_wind, MAX_WIND_SPEED
 class Homework():
     
     # defaults
-    DEFAULT_AREA_SOURCE         = [1000.0, 500.0]
+    DEFAULT_AREA_SOURCE         = [500.0, 500.0]
     DEFAULT_AREA_UNIT           = 'm'
     DEFAULT_IMAGE_SCALE         = 1.0
     DEFAULT_PROJECTION          = "+proj=utm +zone=13 +ellps=WGS84 +units=m"
