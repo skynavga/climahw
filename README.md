@@ -23,7 +23,7 @@ For this simple assignment, I have selected the [UTM](https://proj.org/operation
 ```
 conda env create -f environment.yml
 conda activate climahw
-... __ run climahw examples, tests, etc. __
+... run climahw examples, tests, etc.
 conda deactivate
 ```
 
