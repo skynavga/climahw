@@ -53,7 +53,7 @@ class RegressionTestClass(unittest.TestCase):
         self.assertTrue(self._compareImages(Homework().run(rArgs), rFile))
 
     def _mkTestCase(self, options, oFileName):
-        progn = 'climahw.homework '
+        progn = 'climahw.homework'
         files = 'data/00_u.png data/00_v.png %s/%s.png' % (self._tempDir, oFileName)
         args  = '%s %s %s' % (progn, options, files)
         rArgs = args.split()

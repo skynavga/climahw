@@ -34,7 +34,7 @@ class Homework():
 
     # other constants
     DEGREES_TO_METERS           = 500.0/0.005
-    VERSION                     = "climahw 1.0 02/24/2020"
+    VERSION                     = "climahw 1.0.1 03/11/2020"
 
     def run(self, args):
         return self._process_data(self._process_args(args))
@@ -72,8 +72,7 @@ class Homework():
         ap.add_argument("vFile", help="v-component input file, an 8-bit PNG grayscale image")
         ap.add_argument("oFile", help="wind speed magnitude output file, an 8-bit PNG grayscale image")
         # parse arguments
-        del args[0]                     # need to remove 0th argument which contains module name
-        pa = ap.parse_args(args)        # now we can parse arguments
+        pa = ap.parse_args(args[1:])
         # post-processing
         if pa.nprocs > self.DEFAULT_NUM_PROCS:
             pa.nprocs = self.DEFAULT_NUM_PROCS
