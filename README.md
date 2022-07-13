@@ -18,12 +18,21 @@ For this simple assignment, I have selected the [UTM](https://proj.org/operation
 
 5. For the purpose of converting between degrees to linear distance, the instructions specify use of a fixed conversion factor of 500 meters per 0.005 degrees latitude (and longitude), which works out to 100km/degree. I will just mention that the relationship between degrees latitude and longitude and linear distance is not constant on the surface of the Earth; for latitude, it is nearly constant at ~111km/degree, slightly increasing towards the poles; however, for longitude, it is at a maximum (also ~111km) near the equator, and decreasing to zero at the poles. As a consequence, using a constant mapping of 100km/degree, while a convenient simplification, introduces gross errors when used to process real world data. However, since we are using the [UTM](https://proj.org/operations/projections/utm.html) projection for resampling (by default), which has its origin on the Equator, then the mapping turns out to be nearly constant, so the stated conversion is not unreasonable as a rough approximation.
 
+## Dependencies
+
+  - [imageio](https://imageio.readthedocs.io/en/stable/index.html) 2.8.0
+  - [numpy](https://numpy.org/) 1.18.1
+  - [pyresample](https://pyresample.readthedocs.io/en/latest/) 1.14.0
+  - [python](https://www.python.org/) 3.8
+  
+Later versions of the above are presumed to work (but have not been tested).
+
 ## Installation
 
 ```
 conda env create -f environment.yml
 conda activate climahw
-... __ run climahw examples, tests, etc. __
+... run climahw examples, tests, etc. ...
 conda deactivate
 ```
 
@@ -137,6 +146,7 @@ Ran 6 tests in 96.224s
 OK
 ```
 
+<<<<<<< HEAD
 ## Dependencies
 
 - [imageio](https://imageio.readthedocs.io/en/stable/index.html) 2.8.0
@@ -146,6 +156,8 @@ OK
 
 Later versions of the above are presumed to work (but have not been tested).
 
+=======
+>>>>>>> c53836965395beafa5a5881aaeb35c9d5251a550
 ## Potential Improvements
 
 1. Improve usage message (add default option values, improve option argument labels, etc).
