@@ -146,18 +146,6 @@ Ran 6 tests in 96.224s
 OK
 ```
 
-<<<<<<< HEAD
-## Dependencies
-
-- [imageio](https://imageio.readthedocs.io/en/stable/index.html) 2.8.0
-- [numpy](https://numpy.org/) 1.18.1
-- [pyresample](https://pyresample.readthedocs.io/en/latest/) 1.14.0
-- [python](https://www.python.org/) 3.8
-
-Later versions of the above are presumed to work (but have not been tested).
-
-=======
->>>>>>> c53836965395beafa5a5881aaeb35c9d5251a550
 ## Potential Improvements
 
 1. Improve usage message (add default option values, improve option argument labels, etc).
