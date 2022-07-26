@@ -5,7 +5,7 @@ Convert u- and v- wind velocity component data represented by 8-bit gray-scale
 (as PNG images) to a scalar field then output as an (optionally rescaled)
 8-bit gray-scale PNG file grid fitted to a user specified area of interest.
 
-See README.md for further information.
+See README.md for further information
 
 Created on Feb 24, 2020 by
 @author <glenn.adams@colorado.edu>
@@ -15,9 +15,14 @@ Created on Feb 24, 2020 by
 # pylint: disable=invalid-name
 # pylint: disable=missing-function-docstring
 
-import sys
+from argparse import (
+    ArgumentParser,
+    ArgumentTypeError,
+    Namespace,
+)
 import os
-import argparse
+import sys
+from typing import List
 import warnings
 
 from imageio import imread, imwrite
@@ -43,18 +48,18 @@ def _parse_rescale(string):
     """Parse and verify rescale option value."""
     value = float(string)
     if value < 0 or value > 1:
-        raise argparse.ArgumentTypeError("%r is not a valid scale factor" % value)
+        raise ArgumentTypeError("%r is not a valid scale factor" % value)
     return value
 
 
 def _parse_units(value):
     """Parse and verify units option value."""
     if value not in ("m", "d"):
-        raise argparse.ArgumentTypeError("%r is not a valid unit 'm' or 'd'" % value)
+        raise ArgumentTypeError("%r is not a valid unit 'm' or 'd'" % value)
     return value
 
 
-def _normalize_units(pa):
+def _normalize_units(pa: Namespace):
     """
     Normalize units to meters. If specified units are meters, then do
     nothing; otherwise, if degrees, then convert degrees to meters using
@@ -89,19 +94,19 @@ def _parse_nprocs(string):
     """Parse and verify nprocs option value."""
     value = int(string)
     if value < 1:
-        raise argparse.ArgumentTypeError(
+        raise ArgumentTypeError(
             "%r is not a valid number of processors, must be positive greater than 0"
             % value
         )
     if value > DEFAULT_NUM_PROCS:
-        raise argparse.ArgumentTypeError(
+        raise ArgumentTypeError(
             "%r is not a valid number of processors, must be less than cpu count %d"
             % (value, DEFAULT_NUM_PROCS)
         )
     return value
 
 
-def _process_args(args):
+def _process_args(args: List[str]) -> Namespace:
     """
     Process command line arguments
 
@@ -111,7 +116,7 @@ def _process_args(args):
 
     Returns - Namespace object containing parsed command line arguments
     """
-    ap = argparse.ArgumentParser(prog="climahw.homework")
+    ap: ArgumentParser = ArgumentParser(prog="climahw.homework")
     # optional arguments (short and long form)
     ap.add_argument(
         "-o",
@@ -181,7 +186,7 @@ def _process_args(args):
         "oFile", help="wind speed magnitude output file, an 8-bit PNG grayscale image",
     )
     # parse arguments
-    pa = ap.parse_args(args[1:])
+    pa: Namespace = ap.parse_args(args[1:])
     # post-processing
     pa.nprocs = min(pa.nprocs, DEFAULT_NUM_PROCS)
     if pa.units == "d":
@@ -227,7 +232,7 @@ def _compute_target_image_size(source_image_size, scale_factor):
     return [*map(lambda x: x * scale_factor, source_image_size)]
 
 
-def _resample(pa, wData):
+def _resample(pa: Namespace, wData):
     """
     Resample (grid fit) wind speed magnitude data, wData, a 2-D numpy
     float64 array, using specified projection, creating a new
@@ -258,7 +263,7 @@ def _resample(pa, wData):
         return i2.image_data
 
 
-def _process_data(pa):
+def _process_data(pa: Namespace):
     """
     Perform data processing steps as follows:
 
@@ -278,19 +283,18 @@ def _process_data(pa):
     Returns - path of output PNG file, i.e., oFile command line argument
 
     """
-    # pylint: disable=raise-missing-from
 
     # 1. input image processing
     # ingest u-component image, reporting error if missing or corrupted
     try:
         uData = asarray(imread(pa.uFile), dtype="uint8")
-    except FileNotFoundError as exc:
-        raise DataError("%s: uData image file not found" % exc)
+    except FileNotFoundError as e:
+        raise DataError("%s: uData image file not found" % e) from e
     # ingest v-component image, reporting error if missing or corrupted
     try:
         vData = asarray(imread(pa.vFile), dtype="uint8")
-    except FileNotFoundError as exc:
-        raise DataError("%s: uData image file not found" % exc)
+    except FileNotFoundError as e:
+        raise DataError("%s: uData image file not found" % e) from e
     # basic validation of {u,v}-component image geometries
     assert vData.shape == uData.shape
 
@@ -319,7 +323,7 @@ class Homework:
     def __init__(self):
         pass
 
-    def run(self, args):
+    def run(self, args: List[str]):
         # pylint: disable=no-self-use
         return _process_data(_process_args(args))
 
